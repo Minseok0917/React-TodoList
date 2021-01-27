@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import styled from "styled-components";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import TodoList from "./componets/templates/TodoList";
+
+const App = function () {
+    return (
+        <div>
+            <TodoList></TodoList>
+        </div>
+    );
+};
 
 export default App;
+
+/* 
+TodoList 계획
+1. 생성
+2. 삭제
+3. 업데이트
+
+
+Form 
+ Input 
+ Button 
+*/
