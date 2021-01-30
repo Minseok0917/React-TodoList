@@ -2,7 +2,7 @@
 
 ### Why
 
--   atomic pattern
+-   연습
 
 #
 
