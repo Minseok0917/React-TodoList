@@ -15,6 +15,7 @@ const TodoList = function () {
                     ...state,
                     {
                         status: false,
+                        update: false,
                         value: value,
                     },
                 ]);
@@ -54,20 +55,68 @@ const TodoContent = function ({ state, setState }) {
         state[index].status = !state[index].status;
         setState([...state]);
     }
+    function valueModify(event) {
+        const parent = event.target.parentNode;
+        const index = parent.getAttribute("data-index");
+        state[index].update = true;
+        setState([...state]);
+    }
+    function Keydown(event) {
+        const { target, keyCode } = event;
+        const index = target.parentNode.getAttribute("data-index");
+        const value = target.value;
+        const isResult = [13, 9].includes(keyCode);
+        if (isResult) {
+            event.preventDefault();
+            if (value.length) {
+                state[index].update = false;
+                setState([...state]);
+            }
+        }
+    }
+    function Input(event) {
+        const target = event.target;
+        const index = target.parentNode.getAttribute("data-index");
+        const value = target.value.replaceAll(
+            /[^A-Za-z가-힣ㄱ-ㅎ0-9\_\-]/gi,
+            ""
+        );
+        state[index].value = value;
+        setState([...state]);
+    }
+    function Blur(event) {
+        const index = event.target.parentNode.getAttribute("data-index");
+        state[index].update = false;
+        setState([...state]);
+    }
     return (
         <TodoContentStyle>
             {state.map((data, index) => {
-                const { status, value } = data;
-
+                const { status, value, update } = data;
+                if (update) {
+                    return (
+                        <Row data-index={index}>
+                            <TodoInput
+                                type="text"
+                                value={value}
+                                onKeyDown={Keydown}
+                                onInput={Input}
+                                onBlur={Blur}
+                                autoFocus
+                            />
+                        </Row>
+                    );
+                }
                 return (
                     <Row data-index={index}>
                         <RowValue
                             className={status ? "active" : ""}
                             onClick={valueClick}
                         >
-                            {value}
+                            {value}{" "}
                         </RowValue>
                         <Button onClick={deleteClick}>X</Button>
+                        <Button onClick={valueModify}>!</Button>
                     </Row>
                 );
             })}
@@ -88,6 +137,7 @@ const RowFadeTop = keyframes`
     }
 `;
 const Row = styled.div`
+    position: relative;
     height: 50px;
     line-height: 50px;
     animation: ${RowFadeTop} 0.2s linear both;
@@ -103,6 +153,7 @@ const Button = styled.button`
     border: 0;
     outline: none;
     padding: 3px 20px;
+    cursor: pointer;
 `;
 const TodoInput = styled.input`
     width: 100%;
@@ -113,7 +164,6 @@ const TodoInput = styled.input`
     border: unset;
     box-shadow: 2px 2px 8px #ddd;
     transition: 0.5s;
-    position: relative;
     &:focus {
         background: #333;
         color: #fff;
