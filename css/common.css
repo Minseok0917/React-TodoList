@@ -16,3 +16,7 @@ body {
     height: 100%;
     font-size: 10px;
 }
+
+span.active {
+    text-decoration: line-through;
+}
