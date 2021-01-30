@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import TodoList from "./componets/templates/TodoList";
+import TodoList from "./components/TodoList";
 
 const App = function () {
     return (
